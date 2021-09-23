@@ -7,8 +7,10 @@ let filledBoxes = 0;
 
 // current colour
 let r = 255;
-let g = 0;
-let b = 0;
+let g = 170;
+let b = 170;
+
+const progressBar = document.getElementById('progress-bar');
 
 const autoGrow = document.getElementById('auto');
 
@@ -56,8 +58,9 @@ function restart(size = 0) {
     currentSize = newSize;
     filledBoxes = 0;
     r = 255;
-    g = 0;
-    b = 0;
+    g = 170;
+    b = 170;
+    progressBar.style.width = "0%";
     totalBoxes = newSize ** 2;
     populateBoxes(newSize);
   }
@@ -67,27 +70,30 @@ function restart(size = 0) {
   }
 }
 
-// start 255, 0 , 0
+// start 255, 170 , 170
 // 0   > 33%  - adding G                @33%  255, 255, 0
 // 33% > 66%  - removing R, adding B    @66%  0,   255, 255
 // 66% > 100% - removing G              @100% 0,   0,   255
 function getNewRGB() {
   let percent = Math.ceil(filledBoxes / totalBoxes * 100);
-  let increment = 255 / totalBoxes * 3;
+  let increment = 255 / totalBoxes;
   if (percent <= 33) {
     g = Math.min(g + increment, 255);
   }
   else if (percent <= 66) {
     r = Math.max(r - increment, 0);
-    g = Math.min(g + increment, 255);
+    //g = Math.min(g + increment, 255);
     b = Math.min(b + increment, 255);
   }
   else if (percent <= 100) {
-    r = Math.max(r - increment, 0);
+    //r = Math.max(r - increment, 0);
     g = Math.max(g - increment, 0);
-    b = Math.min(b + increment, 255);
+    //b = Math.min(b + increment, 255);
   }
   console.log(`rgb(${r}, ${g}, ${b})`);
+  console.log(percent);
+  progressBar.style.width = `${percent}%`;
+  progressBar.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
   return `rgb(${r}, ${g}, ${b})`;
 }
 
